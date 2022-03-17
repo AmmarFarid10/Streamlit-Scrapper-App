@@ -5,12 +5,7 @@ import pandas as pd
 def getData(userName):
    url = "https://github.com/{}?tab=repositories".format(userName)
    page = requests.get(url)
-   decoded = page.content.decode("utf-8") # Converting content into HTML
-   # Creating and saving html file
-   f = open("index.html",'w')
-   f.write(decoded)
-   f.close()
-
+   
    soup = BeautifulSoup(page.content , 'html.parser')
    info = {}
 
@@ -45,32 +40,36 @@ def getData(userName):
 
    for repo in repos:
       #repo name and link
-      try:
-         name =  repo.select_one('a[itemprop*=codeRepository]').get_text().strip()
-         link = 'https://github.com/{}/{}'.format(userName,name)
-      except:
-         name = ''
-         link = ''
-   #repo update time
-   try:
-      updated = repo.find('relative-time').get_text()
-   except:
-      updated = ''
-   # programming language
-   try:
-      language = repo.select_one('span[itemprop*=programmingLanguage]').get_text()
-   except:
-      language = ''
-   # description
-   try:
-      description = repo.select_one('p[itemprop*=description]').get_text().strip()
-   except:
-      description = ''
-   repo_info.append({'name': name ,
-     'link': link ,
-     'updated ':updated ,
-     'language': language ,
-     'description':description})
+
+       try:
+           name =  repo.select_one('a[itemprop*=codeRepository]').get_text().strip()
+           link = 'https://github.com/{}/{}'.format(userName,name)
+       except:
+            name = ''
+            link = ''
+      #repo update time
+
+       try:
+            updated = repo.find('relative-time').get_text()
+       except:
+            updated = ''
+      # programming language
+
+       try:
+            language = repo.select_one('span[itemprop*=programmingLanguage]').get_text()
+       except:
+            language = ''
+      # description
+
+       try:
+            description = repo.select_one('p[itemprop*=description]').get_text().strip()
+       except:
+            description = ''
+       repo_info.append({'name': name ,
+      'link': link ,
+      'updated ':updated ,
+      'language': language ,
+      'description':description})
    repo_info = pd.DataFrame(repo_info)
    return info , repo_info
 
