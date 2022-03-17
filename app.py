@@ -19,7 +19,7 @@ if userName != '':
                 )
             else:
                 st.image(value)
-                st.subheader(" Recent Repositories")
-                st.table(repo_info)
+        st.subheader(" Recent Repositories")
+        st.table(repo_info)
     except:
         st.subheader("User doesn't exist")
